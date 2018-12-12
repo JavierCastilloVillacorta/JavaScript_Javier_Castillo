@@ -18,8 +18,6 @@ var Calculadora ={
   teclaPunto: "",
   teclaIgual: "",
   teclaSuma: "",
-
-
   pantalla:"",
   digitoOperacion:"",
   operadorA: "",
@@ -27,9 +25,7 @@ var Calculadora ={
   operacion:"",
   resultadoOperacion: "",
 
-
   init: function(){
-    var self = this
     this.pantalla = document.getElementById('display')
     this.teclaOn= document.getElementById('on')
     this.teclaSing = document.getElementById('sign')
@@ -51,9 +47,12 @@ var Calculadora ={
     this.teclaPunto = document.getElementById('punto')
     this.teclaIgual= document.getElementById('igual')
     this.teclaSuma= document.getElementById('mas')
-
-
-    // EVENTOS CLICK DE LAS IMAGENES - NUMEROS
+    this.funcionClickNumeros() // EVENTOS CLICK DE LAS IMAGENES - NUMEROS
+    this.funcionClickOperadores() // EVENTO CLICK DE LAS IMAGENES - OPERADORES
+    this.funcionClickOtros() // EVENTO CLICK DE LAS IMAGENES OTRAS PUNTO - IGUAL - ETC
+  },
+  funcionClickNumeros: function(){
+    var self = this
     this.teclaNumero0.onmousedown = function(e){
       var numero = "0";
       self.agregaPantalla(numero)
@@ -134,12 +133,18 @@ var Calculadora ={
     this.teclaNumero9.onmouseup = function(e){
       self.teclaNumero9.style="padding: 0px"
     }
-    // EVENTO CLICK DE LAS IMAGENES - OPERADORES
+  },
+  funcionClickOperadores: function(){
+    var self = this
     this.teclaSuma.onmousedown = function(e){
-      self.agregaPantalla()
-      self.operadorA = self.digitoOperacion
-      self.operacion = "+"
-      self.limpiarCalculadora()
+      if (self.digitoOperacion == "") {
+        alert("Ingrese Un Numero : Exprecion Incorrecta")
+      }else{
+        self.agregaPantalla()
+        self.operadorA = self.digitoOperacion
+        self.operacion = "+"
+        self.limpiarCalculadora()
+      }
       self.teclaSuma.style="padding: 2%"
     }
     this.teclaSuma.onmouseup = function(e){
@@ -161,26 +166,36 @@ var Calculadora ={
       self.teclaResta.style="padding: 0px"
     }
     this.teclaMultiplicar.onmousedown = function(e){
-      self.agregaPantalla()
-      self.operadorA = self.digitoOperacion
-      self.operacion = "*"
-      self.limpiarCalculadora()
+      if (self.digitoOperacion == "") {
+        alert("Ingrese Un Numero : Exprecion Incorrecta")
+      }else{
+        self.agregaPantalla()
+        self.operadorA = self.digitoOperacion
+        self.operacion = "*"
+        self.limpiarCalculadora()
+      }
       self.teclaMultiplicar.style="padding: 2%"
     }
     this.teclaMultiplicar.onmouseup = function(e){
       self.teclaMultiplicar.style="padding: 0px"
     }
     this.teclaDividido.onmousedown = function(e){
-      self.agregaPantalla()
-      self.operadorA = self.digitoOperacion
-      self.operacion = "/"
-      self.limpiarCalculadora()
+      if (self.digitoOperacion == "") {
+        alert("Ingrese Un Numero : Exprecion Incorrecta")
+      }else{
+        self.agregaPantalla()
+        self.operadorA = self.digitoOperacion
+        self.operacion = "/"
+        self.limpiarCalculadora()
+      }
       self.teclaDividido.style="padding: 2%"
     }
     this.teclaDividido.onmouseup = function(e){
       self.teclaDividido.style="padding: 0px"
     }
-    // EVENTO CLICK DE LAS IMAGENES OTRAS
+  },
+  funcionClickOtros: function(){
+    var self = this
     this.teclaOn.onmousedown = function(e){
       self.resetCalculadora()
       self.teclaOn.style="padding: 2%"
@@ -209,23 +224,16 @@ var Calculadora ={
     }
     this.teclaSing.onmousedown= function(e){
       self.pantalla.textContent = parseFloat(self.pantalla.textContent) * -1
-      if (self.pantalla.textContent == "0" || self.pantalla.textContent == "") {
-        var numero = "0"
-      }else {
-        var numero = ""
-      }
-
+      var numero = self.pantalla.textContent
+      self.pantalla.textContent=""
       self.agregaPantalla(numero)
       self.teclaSing.style="padding: 2%"
     }
     this.teclaSing.onmouseup = function(e){
       self.teclaSing.style="padding: 0px"
     }
-
-
   },
   agregaPantalla: function(numero){
-
     if (this.pantalla.textContent == "0") {
       this.pantalla.textContent = ""
     }
@@ -238,19 +246,16 @@ var Calculadora ={
       this.pantalla.textContent = this.pantalla.textContent + numero
     }
   },
-
   resetCalculadora: function(){
     this.operadorA = ""
     this.operadorB = ""
     this.pantalla.textContent = "0"
     this.digitoOperacion=""
-
   },
   limpiarCalculadora: function(){
    this.pantalla.textContent = ""
  },
  resolverProblema: function(){
-   console.log(parseFloat(this.operadorA) +" / "+this.operacion+" / "+ parseFloat (this.operadorB));
    switch (this.operacion) {
      case "+":
       this.resultadoOperacion = parseFloat(this.operadorA) + parseFloat (this.operadorB)
@@ -263,22 +268,18 @@ var Calculadora ={
       break;
     case "/":
       this.resultadoOperacion = parseFloat(this.operadorA) / parseFloat (this.operadorB)
+      console.log(parseFloat(this.operadorA) +"/"+ parseFloat (this.operadorB));
       break;
      default:
    }
-   //this.resetCalculadora();
-
-   this.resultadoOperacion = this.resultadoOperacion .toString();
    this.resultadoOperacion = this.resultadoOperacion.toString()
+   console.log(this.resultadoOperacion);
    if (this.resultadoOperacion.length <= 8) {
      this.pantalla.textContent= this.resultadoOperacion
    }else{
      this.pantalla.textContent= this.resultadoOperacion.substr(0,8)
    }
    this.operadorA = this.pantalla.textContent;
-   //this.digitoOperacion = this.pantalla.textContent;
-   console.log(this.pantalla.textContent +"///"+this.resultadoOperacion + " digito : "+ this.digitoOperacion);
-
  },
  verificaDecimal: function(){
   posicion = this.pantalla.textContent.indexOf(".");
@@ -288,8 +289,5 @@ var Calculadora ={
     alert("Solo un punto")
   }
  }
-
-
 }
-
 Calculadora.init();
